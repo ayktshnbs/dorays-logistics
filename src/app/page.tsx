@@ -187,7 +187,11 @@ export default function Home() {
     <main className={`min-h-screen text-[#eae1d8] transition-colors ${isLight ? 'light-site bg-[#f7f5f2]' : 'dark-site bg-[#110e09]'}`}>
       <header className={`sticky top-0 z-50 flex min-h-12 w-full items-center justify-between gap-4 border-b px-4 py-2 text-[13px] shadow-sm sm:px-8 ${isLight ? 'border-black/10 bg-[#f7f5f2]' : 'border-[#4f4538] bg-[#110e09]'}`}>
         <a href="#home" aria-label="Dorays Logistics home">
-          <img src="/dorays-logo.jpg" alt="Dorays Logistics Logo" className="h-7 w-auto object-contain" />
+          <img
+            src={isLight ? '/dorays-logo-light.png' : '/dorays-logo-dark.png'}
+            alt="Dorays Logistics Logo"
+            className="h-10 w-auto object-contain"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 md:flex">
