@@ -143,6 +143,7 @@ const pageCopy = {
     ],
     legal: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
   },
+
   tr: {
     nav: [
       ["Süreç", "#process"],
@@ -292,17 +293,27 @@ export default function Home() {
   const [lang, setLang] = useState<"en" | "tr">("en");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [submitted, setSubmitted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const copy = pageCopy[lang];
   const isLight = theme === "light";
   const themeLabel = isLight ? copy.dark : copy.light;
-  const iconButtonClass = `icon-control ${isLight ? "icon-control-light" : "icon-control-dark"}`;
+  const iconButtonClass = `icon-control ${
+    isLight ? "icon-control-light" : "icon-control-dark"
+  }`;
 
   return (
     <main
-      className={`min-h-screen text-[#eae1d8] transition-colors ${isLight ? "light-site bg-[#f7f5f2]" : "dark-site bg-[#110e09]"}`}
+      className={`min-h-screen text-[#eae1d8] transition-colors ${
+        isLight ? "light-site bg-[#f7f5f2]" : "dark-site bg-[#110e09]"
+      }`}
     >
       <header
-        className={`sticky top-0 z-50 flex min-h-12 w-full items-center justify-between gap-4 border-b px-4 py-2 text-[13px] shadow-sm sm:px-8 ${isLight ? "border-black/10 bg-[#f7f5f2]" : "border-[#4f4538] bg-[#110e09]"}`}
+        className={`sticky top-0 z-50 flex min-h-16 w-full items-center justify-between gap-4 border-b px-4 py-2 text-[15px] shadow-sm backdrop-blur-md sm:px-8 ${
+          isLight
+            ? "border-black/10 bg-[#f7f5f2]/90"
+            : "border-[#4f4538] bg-[#110e09]/90"
+        }`}
       >
         <a
           href="#home"
@@ -311,7 +322,7 @@ export default function Home() {
           <img
             src={isLight ? "/dorays-logo-light.png" : "/dorays-logo-dark.png"}
             alt="Dorays Logistics Logo"
-            className={`h-24 md:h-20 w-auto object-contain ${
+            className={`h-14 w-auto object-contain md:h-20 ${
               isLight ? "" : "drop-shadow-[0_2px_12px_rgba(255,206,128,0.25)]"
             }`}
           />
@@ -323,9 +334,8 @@ export default function Home() {
               key={item}
               className={
                 index === 0
-                  ? "font-semibold text-[#c88919] text-[15px] md:text-[16px] tracking-wide"
-                  : "text-slate-400 transition hover:text-[#c88919] text-[15px] md:text-[16px] tracking-wide"
-
+                  ? "text-[16px] font-semibold tracking-wide text-[#c88919]"
+                  : "text-[16px] tracking-wide text-slate-400 transition hover:text-[#c88919]"
               }
               href={href}
             >
@@ -345,6 +355,7 @@ export default function Home() {
             <Icon className="icon-control-symbol">language</Icon>
             <span className="icon-control-badge">{copy.language}</span>
           </button>
+
           <button
             type="button"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -357,14 +368,93 @@ export default function Home() {
             </Icon>
             <span className="sr-only">{themeLabel}</span>
           </button>
+
           <a
             href="#contact"
-            className="inline-flex h-9 items-center rounded bg-[#ffce80] px-4 text-xs font-extrabold text-[#432c00] transition hover:shadow-[0_0_18px_rgba(255,206,128,0.28)]"
+            className="hidden h-9 items-center rounded bg-[#ffce80] px-4 text-xs font-extrabold text-[#432c00] transition hover:shadow-[0_0_18px_rgba(255,206,128,0.28)] sm:inline-flex"
           >
             {copy.quote}
           </a>
+
+          <div className="mobile-menu-button-wrap">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(!menuOpen)}
+              className={iconButtonClass}
+              aria-label="Open menu"
+            >
+              <Icon className="icon-control-symbol">
+                {menuOpen ? "close" : "menu"}
+              </Icon>
+            </button>
+          </div>
         </div>
       </header>
+
+      {menuOpen && (
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setMenuOpen(false)}
+            className="mobile-menu-overlay"
+          />
+
+          <aside
+            className={`mobile-menu-panel ${
+              isLight
+                ? "border-black/10 bg-[#f7f5f2] text-[#231f19]"
+                : "border-[#4f4538] bg-[#110e09] text-[#eae1d8]"
+            }`}
+          >
+            <div className="mb-10 flex items-center justify-between border-b border-[#4f4538] pb-5">
+              <img
+                src={
+                  isLight ? "/dorays-logo-light.png" : "/dorays-logo-dark.png"
+                }
+                alt="Dorays Logistics Logo"
+                className="h-12 w-auto object-contain"
+              />
+
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                className={iconButtonClass}
+                aria-label="Close menu"
+              >
+                <Icon className="icon-control-symbol">close</Icon>
+              </button>
+            </div>
+
+            <nav className="flex flex-col gap-3">
+              {copy.nav.map(([item, href], index) => (
+                <a
+                  key={item}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`rounded-xl px-4 py-4 text-[18px] font-semibold tracking-wide transition ${
+                    index === 0
+                      ? "bg-[#ffce80]/15 text-[#ffce80]"
+                      : isLight
+                        ? "text-[#231f19] hover:bg-black/5 hover:text-[#c88919]"
+                        : "text-[#eae1d8] hover:bg-white/5 hover:text-[#ffce80]"
+                  }`}
+                >
+                  {item}
+                </a>
+              ))}
+            </nav>
+
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              className="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-[#ffce80] px-5 py-4 text-sm font-extrabold text-[#432c00] shadow-[0_0_22px_rgba(255,206,128,0.24)]"
+            >
+              {copy.quote}
+            </a>
+          </aside>
+        </>
+      )}
 
       <section
         id="home"
